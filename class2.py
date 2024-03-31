@@ -58,6 +58,20 @@ def append_message(message: dict) -> None:
  
 st.title("Gemini 聊天機器人")
 
+if 'welcome' not in st.session_state:
+    # st.session_state.lang = lang
+    welcome  = model.generate_content(f'''簡單向用戶打招呼，你的名字叫小捷，請全部用繁體中文回答''')    
+    responsei = st.session_state.chat.send_message(f"""向使用者打招呼並告知他們你是一個儲能充電樁的專家，請全部用繁體中文回答""", stream=True)
+    responsei.resolve()
+    welcome.resolve()
+    st.session_state.welcome = welcome
+
+    with st.chat_message('ai'):
+        st.write(st.session_state.welcome.text)
+else:
+    with st.chat_message('ai'):
+        st.write(st.session_state.welcome.text)
+
 ## 把聊天紀錄顯示在上方
 # for message in st.session_state.chat.history:
     # with st.chat_message(role_to_streamlit(message.role)):
